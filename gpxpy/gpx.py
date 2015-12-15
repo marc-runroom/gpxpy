@@ -1854,6 +1854,14 @@ class GPXTrack:
         return 'GPXTrack(%s)' % representation
 
 
+class GPXExtension:
+
+    def __init__(self, prefix, namespace, location):
+        self.prefix = prefix
+        self.namespace = namespace
+        self.location = location
+
+
 class GPX:
     gpx_10_fields = [
             mod_gpxfield.GPXField('version', attribute=True),
