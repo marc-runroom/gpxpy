@@ -1854,7 +1854,7 @@ class GPXTrack:
         return 'GPXTrack(%s)' % representation
 
 
-class GPXExtension:
+class GPXExtensionNamespace:
 
     def __init__(self, prefix, namespace, location):
         self.prefix = prefix

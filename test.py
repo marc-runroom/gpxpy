@@ -2709,11 +2709,11 @@ class AbstractTests:
         self.assertEquals(100, elevation_min)
         self.assertEquals(200, elevation_max)
 
-    def test_gpx_extension_class(self):
+    def test_gpx_extension_namespace_class(self):
         prefix = 'gpxx'
         namespace = 'http://www.garmin.com/xmlschemas/GpxExtensions/v3'
         location = 'http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd'
-        gpx_extension = mod_gpx.GPXExtension(prefix, namespace, location)
+        gpx_extension = mod_gpx.GPXExtensionNamespace(prefix, namespace, location)
         assert gpx_extension.prefix == 'gpxx'
         assert gpx_extension.namespace == 'http://www.garmin.com/xmlschemas/GpxExtensions/v3'
         assert gpx_extension.location == 'http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd'
