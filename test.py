@@ -2718,6 +2718,25 @@ class AbstractTests:
         assert gpx_extension.namespace == 'http://www.garmin.com/xmlschemas/GpxExtensions/v3'
         assert gpx_extension.location == 'http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd'
 
+    def test_gpx_class_with_extension_namespace(self):
+        gpx = mod_gpx.GPX()
+        prefix = 'gpxx'
+        namespace = 'http://www.garmin.com/xmlschemas/GpxExtensions/v3'
+        location = 'http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd'
+        gpx_extension = mod_gpx.GPXExtensionNamespace(prefix, namespace, location)
+        gpx.extension_namespaces.append(gpx_extension)
+        self.assertEquals(gpx.extension_namespaces[0], gpx_extension)
+
+    def test_parse_gpx_with_extension_namespace(self):
+        gpx = self.parse('track-with-extension-namespaces.gpx')
+        prefix = 'gpxx'
+        namespace = 'http://www.garmin.com/xmlschemas/GpxExtensions/v3'
+        location = 'http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd'
+        gpx_extension = mod_gpx.GPXExtensionNamespace(prefix, namespace, location)
+        assert gpx.extension_namespaces[0].prefix == gpx_extension.prefix
+        assert gpx.extension_namespaces[0].namespace == gpx_extension.namespace
+        assert gpx.extension_namespaces[0].location == gpx_extension.location
+
 
 class LxmlTests(mod_unittest.TestCase, AbstractTests):
     def get_parser_type(self):

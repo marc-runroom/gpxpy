@@ -102,6 +102,45 @@ class AbstractGPXField:
         raise Exception('Not implemented')
 
 
+class GPXExtensionNamespaceField(AbstractGPXField):
+    def __init__(self, name):
+        self.name = name
+        self.attribute_field = None
+        self.is_list = True
+        self.attribute = False
+
+    def from_xml(self, parser, node, version):
+        from . import gpx as mod_gpx
+        result = parser.get_node_attributes(node)
+        xmlns = result['xmlns']
+        
+        schema_location = result['xsi:schemaLocation'].split()
+
+        namespaces = [schema_location[i] for i in range(0, len(schema_location), 2)]
+        locations = [schema_location[i] for i in range(1, len(schema_location), 2)]
+        if len(namespaces) != len(locations):
+            raise mod_gpx.GPXException('Malformed xsi:schemaLocation attribute')
+
+        xsi_schemalocation = dict(zip(namespaces, locations))
+        
+        default_namespace_attrs = ['xmlns', 'xmlns:xsi']
+        extension_namespaces = []
+        extension_keys = [attr_key for attr_key in result.keys()
+                            if attr_key.split(':')[0] == 'xmlns' and
+                                not attr_key in default_namespace_attrs]
+        
+        for attr_key in extension_keys:
+            prefix = attr_key.split(':')[1]
+            namespace = result[attr_key]
+            location = xsi_schemalocation[namespace]
+            extension_namespace = mod_gpx.GPXExtensionNamespace(prefix, namespace, location)
+            extension_namespaces.append(extension_namespace)
+        return extension_namespaces
+
+    def to_xml(self, value, version):
+        pass
+
+
 class GPXField(AbstractGPXField):
     """
     Used for to (de)serialize fields with simple field<->xml_tag mapping.

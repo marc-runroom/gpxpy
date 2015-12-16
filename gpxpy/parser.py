@@ -89,6 +89,11 @@ class XMLParser:
             return node.attributes[attribute].nodeValue
         return None
 
+    def get_node_attributes(self, node):
+        if (not hasattr(node, 'attributes')) or (not node.attributes):
+            return None
+        return dict(node.attributes.items())
+
 
 class LXMLParser:
     """
@@ -154,6 +159,26 @@ class LXMLParser:
         if node is None:
             return None
         return node.attrib.get(attribute)
+
+    def get_node_attributes(self, node):
+        if node is None:
+            return None
+        attributes_with_prefix = {}
+        if node.tag.split('}')[1] == 'gpx':
+            node.nsmap
+        for attr_key in node.attrib.keys():
+            try:
+                attr_without_prefix = attr_key.split('}')[1]
+                attr_namespace = attr_key.split('}')[0][1:]
+                for key, value in node.nsmap.items():
+                    if value == attr_namespace:
+                        key_with_prefix = key + ':' + attr_without_prefix
+                if not key_with_prefix:
+                    raise mod_gpx.GPXException('An attribute is using an undefined prefix')
+            except IndexError:
+                key_with_prefix = attr_key
+            attributes_with_prefix[key_with_prefix] = node.attrib[attr_key]
+        return attributes_with_prefix
 
 
 class GPXParser:

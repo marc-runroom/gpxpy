@@ -1865,6 +1865,7 @@ class GPXExtensionNamespace:
 class GPX:
     gpx_10_fields = [
             mod_gpxfield.GPXField('version', attribute=True),
+            mod_gpxfield.GPXExtensionNamespaceField('extension_namespaces'),
             mod_gpxfield.GPXField('creator', attribute=True),
             mod_gpxfield.GPXField('name'),
             mod_gpxfield.GPXField('description', 'desc'),
@@ -1881,6 +1882,7 @@ class GPX:
     ]
     gpx_11_fields = [
             mod_gpxfield.GPXField('version', attribute=True),
+            mod_gpxfield.GPXExtensionNamespaceField('extension_namespaces'),
             mod_gpxfield.GPXField('creator', attribute=True),
             'metadata',
                 mod_gpxfield.GPXField('name', 'name'),
@@ -1915,7 +1917,7 @@ class GPX:
             mod_gpxfield.GPXExtensionsField('extensions'),
     ]
 
-    __slots__ = ('version', 'creator', 'name', 'description', 'author_name', 
+    __slots__ = ('version', 'extension_namespaces', 'creator', 'name', 'description', 'author_name', 
                  'author_email', 'link', 'link_text', 'time', 'keywords', 
                  'bounds', 'waypoints', 'routes', 'tracks', 'author_link', 
                  'author_link_text', 'author_link_type', 'copyright_author', 
@@ -1946,6 +1948,7 @@ class GPX:
         self.waypoints = []
         self.routes = []
         self.tracks = []
+        self.extension_namespaces = []
 
     def simplify(self, max_distance=None):
         """
